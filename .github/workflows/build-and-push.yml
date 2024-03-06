@@ -1,12 +1,8 @@
 name: Build and Push Webhook Proxy
 
 on:
-  workflow_dispatch:
-    secrets:
-      DOCKERHUB_USERNAME:
-        required: true
-      DOCKERHUB_PASSWORD:
-        required: true
+  push:
+    branches: master
 
 jobs:
   build:
