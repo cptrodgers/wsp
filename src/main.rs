@@ -1,9 +1,7 @@
 #[macro_use]
 extern crate log;
 
-pub mod center;
-pub mod connector;
-pub mod log_util;
+pub mod server;
 
 use actix_web::middleware::Logger;
 use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
@@ -11,7 +9,7 @@ use actix_web_actors::ws;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::connector::Connector;
+use crate::server::connector::Connector;
 
 #[derive(Deserialize)]
 struct QueryInfo {
@@ -28,7 +26,7 @@ async fn index_ws(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    log_util::setup_logger().unwrap();
+    server::log_util::setup_logger().unwrap();
 
     HttpServer::new(|| {
         App::new()

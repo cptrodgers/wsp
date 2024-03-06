@@ -5,7 +5,7 @@ use std::time::Duration;
 
 use uuid::Uuid;
 
-use crate::connector::{Connector, SendMessage};
+use crate::server::connector::{Connector, SendMessage};
 
 #[derive(Default)]
 pub struct WSCenter {

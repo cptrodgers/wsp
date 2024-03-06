@@ -6,7 +6,7 @@ use actix_web::web::Bytes;
 use actix_web_actors::ws;
 use uuid::Uuid;
 
-use crate::center::{RegisterConnector, WSCenter};
+use crate::server::center::{RegisterConnector, WSCenter};
 
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
