@@ -4,7 +4,7 @@ extern crate log;
 pub mod server;
 
 use actix_web::middleware::Logger;
-use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
+use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer, guard};
 use actix_web_actors::ws;
 use serde::Deserialize;
 use uuid::Uuid;
@@ -30,10 +30,15 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .service(web::resource("/ws").route(web::get().to(index_ws)))
             .wrap(Logger::default())
+            .service(
+                web::resource("/ws")
+                .guard(guard::Get())
+                .guard(guard::Header("upgrade", "websocket"))
+                .route(web::get().to(index_ws))
+            )
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0", 8080))?
     .run()
     .await
 }
