@@ -7,6 +7,8 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - id: commit
+        uses: prompt/actions-commit-hash@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -16,10 +18,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set short commit
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: rodgers/wsp:${{ steps.vars.outputs.sha_short }}
+          tags: rodgers/wsp:${{steps.commit.outputs.short }}
