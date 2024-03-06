@@ -1,3 +1,4 @@
+## BUILD
 FROM rust:1.70 as build
 
 WORKDIR /app
@@ -8,7 +9,13 @@ ADD Cargo.lock /app/
 
 RUN RUST_BACKTRACE=1 cargo build --release
 
-ENV RUST_BACKTRACE=full
+## RUNTIME ENVIRONMENT
+FROM ubuntu:20.04
+RUN apt-get update && apt-get -y upgrade && \
+    apt-get -y install libpq-dev openssl ca-certificates libssl-dev
+
+WORKDIR /app
+COPY --from=build-phase /app/target/release/webhook-proxy /app
 
 EXPOSE 8080
-CMD ["./target/release/webhook-proxy"]
+CMD ["./webhook-proxy"]

@@ -1,11 +1,10 @@
 name: Build and Push Webhook Proxy
 
 on:
-  push:
-    branches: master
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -21,4 +20,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: rodgers/wsp:latest
+          tags: rodgers/wsp:${GITHUB_SHA}
