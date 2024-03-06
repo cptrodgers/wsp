@@ -39,6 +39,7 @@ impl Handler<RegisterConnector> for WSCenter {
     type Result = ();
 
     fn handle(&mut self, msg: RegisterConnector, _: &mut Self::Context) -> Self::Result {
+        info!("[Center] New connector of channel {}", msg.channel);
         if let Some(senders) = self.items.get_mut(&msg.channel) {
             senders.push(msg.connector);
         } else {
@@ -57,6 +58,8 @@ pub struct SendWebhook {
 impl Handler<SendWebhook> for WSCenter {
     type Result = ();
     fn handle(&mut self, msg: SendWebhook, _: &mut Self::Context) -> Self::Result {
+        info!("[Center] New Webhook to channel {}", msg.channel);
+
         let SendWebhook { channel, message } = msg;
         if let Some(senders) = self.items.get(&channel) {
             for sender in senders {
